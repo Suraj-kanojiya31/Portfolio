@@ -271,8 +271,17 @@ html[data-theme="dark"] .site-header.scrolled {
   box-shadow: var(--shadow-sm); border: 1px solid var(--border);
 }
 html[data-theme="dark"] .project-thumb { background: linear-gradient(155deg, #1c2621, #101714); }
+
+.project-thumb-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform var(--dur) var(--ease);
+}
+.project-thumb:hover .project-thumb-img {
+  transform: scale(1.03);
+}
+
 .project-thumb .grid-lines {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; pointer-events: none;
   background-image:
     linear-gradient(90deg, rgba(10,10,10,0.05) 1px, transparent 1px),
     linear-gradient(rgba(10,10,10,0.05) 1px, transparent 1px);
@@ -280,23 +289,24 @@ html[data-theme="dark"] .project-thumb { background: linear-gradient(155deg, #1c
 }
 .project-thumb .index {
   position: absolute; top: var(--s-24); left: var(--s-24);
-  font-family: var(--font-mono); font-size: 12px; color: var(--ink); opacity: 0.5;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink); opacity: 0.75;
+  background: rgba(255,255,255,0.85); padding: 3px 8px; border-radius: var(--r-pill);
+  backdrop-filter: blur(4px); z-index: 2;
 }
+html[data-theme="dark"] .project-thumb .index {
+  background: rgba(12,16,14,0.85); color: var(--ink);
+}
+
 .thumb-action-overlay {
-  position: absolute; inset: 0; background: rgba(10,10,10,0.25);
+  position: absolute; inset: 0; background: rgba(10,10,10,0.3);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity var(--dur) var(--ease);
+  opacity: 0; transition: opacity var(--dur) var(--ease); z-index: 3;
 }
 .project-thumb:hover .thumb-action-overlay { opacity: 1; }
 .thumb-badge {
   background: var(--surface); color: var(--ink); padding: 8px 16px;
   border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 12px;
   letter-spacing: 0.04em; font-weight: 500; box-shadow: var(--shadow-md);
-}
-.blank-thumb-label {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text-muted); padding: var(--s-24); text-align: center;
 }
 
 .project-body { padding: var(--s-24) 0 0 0; }
@@ -340,26 +350,20 @@ html[data-theme="dark"] .project-thumb { background: linear-gradient(155deg, #1c
   gap: var(--s-48); align-items: center; margin-top: var(--s-32);
 }
 .ai-visual {
-  position: relative; min-height: 380px; display: grid; place-items: center;
+  position: relative; min-height: 380px; aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
   background: linear-gradient(135deg, #e5e2da, #d0ccc0); border-radius: var(--r-img); overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer;
 }
 html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d, #0d1411); }
-.ai-visual:before {
-  content: ""; position: absolute; width: 60%; height: 60%; border-radius: 50%;
-  background: radial-gradient(circle, rgba(184,155,98,0.3) 0%, transparent 70%); filter: blur(25px);
+
+.ai-thumb-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform var(--dur) var(--ease);
 }
-.ai-orbit {
-  position: absolute; border: 1px solid var(--border); border-radius: 50%;
-  width: 48%; height: 68%; animation: orbit 14s linear infinite;
+.ai-visual:hover .ai-thumb-img {
+  transform: scale(1.03);
 }
-.orbit-two { width: 68%; height: 38%; animation-duration: 18s; animation-direction: reverse; }
-.ai-core {
-  position: relative; width: 100px; height: 100px; border-radius: 50%;
-  display: grid; place-items: center; background: var(--ink); color: var(--bg);
-  font-weight: 800; font-size: 1.6rem; box-shadow: var(--shadow-float);
-}
-@keyframes orbit { to { transform: rotate(360deg); } }
+
 .ai-info { padding: 0; display: flex; flex-direction: column; justify-content: center; }
 .ai-info h3 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; margin: var(--s-16) 0; }
 .ai-info p { color: var(--text-secondary); line-height: 1.65; margin-bottom: var(--s-32); font-size: 17px; }
@@ -636,9 +640,9 @@ html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d
         <!-- Project 1: ArtBound -->
         <article class="project-card">
           <div class="project-thumb project-slideshow-trigger" data-project="project1" role="button" tabindex="0" aria-label="Open ArtBound full screen case study">
-            <div>
-              <img src="images/Hero 1.png" alt="ArtBound Cover" style="width:100%; height:100%; object-fit:cover;">
-            </div>
+            <img class="project-thumb-img" src="images/Hero 1.png" alt="ArtBound Cover Thumbnail">
+            <div class="grid-lines"></div>
+            <span class="index">01</span>
             <div class="thumb-action-overlay">
               <span class="thumb-badge">Full Screen Slides ↗</span>
             </div>
@@ -664,10 +668,13 @@ html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d
         <!-- Project 2: BookMyShow Redesign -->
         <article class="project-card">
           <div class="project-thumb project-slideshow-trigger" data-project="project2" role="button" tabindex="0" aria-label="Open BookMyShow full screen case study">
-            
-            <div>
-              <img src="images/Featured 1.png" alt="BookMyShow Redesign Cover" style="width:100%; height:100%; object-fit:cover;">
+            <img class="project-thumb-img" src="images/Featured 1.png" alt="BookMyShow Redesign Cover Thumbnail">
+            <div class="grid-lines"></div>
+            <span class="index">02</span>
+            <div class="thumb-action-overlay">
+              <span class="thumb-badge">Full Screen Slides ↗</span>
             </div>
+          </div>
           <div class="project-body">
             <h3 class="project-title">BookMyShow Redesign</h3>
             <div class="project-tags">
@@ -713,10 +720,11 @@ html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d
       </div>
 
       <article class="ai-card">
-        <div>
-        <div class="ai-visual">
-  <img src="images/Hubly Featured Image 1.png" alt="Hubly Cover" style="width:100%; height:100%; object-fit:cover;">
-        </div>
+        <div class="ai-visual project-slideshow-trigger" data-project="project3" role="button" tabindex="0" aria-label="Open Hubly case study">
+          <img class="ai-thumb-img" src="images/Hubly Featured Image 1.png" alt="Hubly Experiment Cover Thumbnail">
+          <div class="thumb-action-overlay">
+            <span class="thumb-badge">Full Screen Slides ↗</span>
+          </div>
         </div>
         <div class="ai-info">
           <h3>Hubly — Freelancer Business Hub</h3>
@@ -961,7 +969,7 @@ html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d
       };
       renderCursor();
 
-      $$("a, button, .project-thumb, .theme-toggle").forEach(el => {
+      $$("a, button, .project-thumb, .ai-visual, .theme-toggle").forEach(el => {
         el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
         el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
       });
