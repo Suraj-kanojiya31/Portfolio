@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suraj Kanojiya — UI/UX Designer Portfolio">
+  <title>Suraj Kanojiya — UI/UX Designer</title>
+  
+  <!-- Design System Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+/* ============================================================
+   DESIGN SYSTEM TOKENS
+============================================================ */
+:root {
+  --ink: #0A0A0A;
+  --bg: #F7F6F2;
+  --surface: #FFFFFF;
+  --text-secondary: #737373;
+  --text-muted: #A3A3A3;
+  --border: #D9D7D2;
+  --accent: #B89B62;
+  --error: #B42318;
+  --success: #027A48;
+
+  --s-8: 8px; --s-16: 16px; --s-24: 24px; --s-32: 32px; --s-48: 48px;
+  --s-64: 64px; --s-80: 80px; --s-96: 96px; --s-128: 128px; --s-160: 160px;
+
+  --r-sm: 8px; --r-card: 16px; --r-img: 16px; --r-lg: 22px; --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(10,10,10,0.04), 0 1px 1px rgba(10,10,10,0.03);
+  --shadow-md: 0 8px 24px -8px rgba(10,10,10,0.10), 0 2px 6px -2px rgba(10,10,10,0.05);
+  --shadow-float: 0 20px 48px -16px rgba(10,10,10,0.16);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 320ms;
+
+  --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  
+  --dot-default: rgba(10,10,10,0.14);
+}
+
+html[data-theme="dark"] {
+  --ink: #F7F6F2;
+  --bg: #0C100E;
+  --surface: #141A17;
+  --text-secondary: #9DA79D;
+  --text-muted: #647065;
+  --border: rgba(247,246,242,0.14);
+  --accent: #D4B87E;
+  --dot-default: rgba(247,246,242,0.14);
+  --shadow-md: 0 8px 24px -8px rgba(0,0,0,0.5);
+  --shadow-float: 0 20px 48px -16px rgba(0,0,0,0.7);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-display);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+body.modal-open { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--ink); color: var(--bg); }
+
+.noise {
+  position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+}
+
+/* Custom Cursor */
+.cursor-dot, .cursor-ring { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 200; display: none; }
+.cursor-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); transform: translate(-50%, -50%); }
+.cursor-ring { width: 36px; height: 36px; border: 1px solid var(--ink); border-radius: 50%; transform: translate(-50%, -50%); transition: width .25s, height .25s, background .25s; }
+body.cursor-hover .cursor-ring { width: 58px; height: 58px; background: rgba(10,10,10,0.06); }
+html[data-theme="dark"] body.cursor-hover .cursor-ring { background: rgba(247,246,242,0.08); }
+
+/* Focus visibility */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Header & Navigation */
+.site-header {
+  height: 76px; position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4vw; border-bottom: 1px solid transparent;
+  transition: var(--dur) var(--ease);
+}
+.site-header.scrolled {
+  background: rgba(247,246,242,0.85);
+  backdrop-filter: blur(16px);
+  border-color: var(--border);
+  height: 66px;
+}
+html[data-theme="dark"] .site-header.scrolled {
+  background: rgba(12,16,14,0.85);
+}
+.brand {
+  font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 8px;
+}
+.brand .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.desktop-nav { display: flex; gap: var(--s-32); list-style: none; align-items: center; }
+.nav-link {
+  position: relative; font-size: 14px; color: var(--text-secondary); padding: 4px 0;
+  transition: color var(--dur) var(--ease);
+}
+.nav-link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
+  background: var(--ink); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+.nav-link:hover { color: var(--ink); }
+.nav-link:hover::after { transform: scaleX(1); }
+
+.theme-toggle {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: var(--r-pill);
+  background: var(--surface); color: var(--ink);
+  box-shadow: var(--shadow-sm); font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.08em; cursor: pointer; transition: var(--dur) var(--ease);
+}
+.theme-toggle:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.menu-btn { display: none; width: 38px; height: 32px; position: relative; }
+.menu-btn span { position: absolute; left: 5px; width: 28px; height: 1.5px; background: var(--ink); transition: .3s; }
+.menu-btn span:first-child { top: 11px; }
+.menu-btn span:last-child { top: 20px; }
+
+.mobile-menu {
+  position: fixed; z-index: 45; top: 0; right: 0; left: 0;
+  background: var(--surface); padding: 95px 7vw 35px;
+  display: flex; flex-direction: column; gap: var(--s-24);
+  transform: translateY(-100%); transition: .45s var(--ease);
+  border-bottom: 1px solid var(--border);
+}
+.mobile-menu.open { transform: none; }
+.mobile-menu-links { display: flex; flex-direction: column; gap: var(--s-16); }
+.mobile-menu a { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.mobile-menu-divider { height: 1px; background: var(--border); width: 100%; margin: var(--s-8) 0; }
+
+/* ============================================================
+   HERO: DESIGN SYSTEM SPECIMEN ALIGNMENT
+============================================================ */
+.hero {
+  min-height: 100svh; position: relative; overflow: hidden;
+  background: var(--bg); display: flex; align-items: center; justify-content: flex-start;
+}
+#heroCanvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 5; width: 100%; max-width: 1180px; margin: 0 auto;
+  min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start; text-align: left;
+  padding: 120px 7vw 60px; pointer-events: none;
+}
+.hero-content * { pointer-events: auto; }
+
+.hero-large-text {
+  font-size: clamp(34px, 4.8vw, 60px); font-weight: 700; line-height: 1.1;
+  letter-spacing: -0.025em; max-width: 860px; text-align: left; margin: 0 0 var(--s-24) 0;
+}
+
+.hero-small-profile {
+  text-align: left; margin: 0 0 var(--s-32) 0;
+}
+.hero-name {
+  font-size: 20px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink);
+}
+.hero-role {
+  font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;
+}
+
+/* CTA BUTTONS (Restored to Left/Start alignment) */
+.hero-actions-center {
+  display: flex; gap: var(--s-16); justify-content: flex-start; align-items: center;
+  flex-wrap: wrap; margin-top: var(--s-8); width: 100%;
+}
+
+.btn-stroke {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-display); font-size: 15px; font-weight: 600;
+  padding: 14px 26px; border-radius: var(--r-pill);
+  background: transparent; color: var(--ink); border: 1px solid var(--ink);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  cursor: pointer; text-decoration: none; position: relative; overflow: hidden;
+  will-change: transform;
+}
+.btn-stroke:hover, .btn-stroke.touch-active {
+  background: var(--ink); color: var(--bg); transform: translateY(-3px); box-shadow: var(--shadow-md);
+}
+.btn-stroke:active { transform: translateY(-1px); }
+
+.btn-icon-float {
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform var(--dur) var(--ease);
+}
+.btn-stroke:hover .btn-icon-float, .btn-stroke.touch-active .btn-icon-float {
+  transform: translate(3px, -3px);
+}
+
+.roll-track {
+  display: inline-flex; flex-direction: column;
+  height: 1.25em; line-height: 1.25em; overflow: hidden; position: relative;
+}
+.roll-text {
+  display: block; white-space: nowrap; transition: transform var(--dur) var(--ease); will-change: transform;
+}
+.roll-text-clone { position: absolute; top: 100%; left: 0; }
+.btn-stroke:hover .roll-text, .btn-stroke.touch-active .roll-text { transform: translateY(-100%); }
+
+/* MOTION BANNER */
+.hero-motion-marquee {
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  overflow: hidden; background: var(--surface); display: flex; flex-direction: column;
+}
+.marquee-line { overflow: hidden; white-space: nowrap; display: flex; }
+.marquee-track-rl {
+  display: flex; width: max-content; align-items: center; gap: var(--s-32); padding: var(--s-16) 0;
+  animation: marqueeRL 32s linear infinite;
+}
+.marquee-track-lr {
+  display: flex; width: max-content; align-items: center; gap: var(--s-32); padding: var(--s-16) 0;
+  border-top: 1px solid var(--border);
+  animation: marqueeLR 32s linear infinite;
+}
+.marquee-line span { font-size: clamp(14px, 1.6vw, 18px); font-weight: 600; letter-spacing: -0.01em; }
+.marquee-line i { font-style: normal; color: var(--accent); font-size: 0.9rem; }
+
+@keyframes marqueeRL { to { transform: translateX(-50%); } }
+@keyframes marqueeLR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* ============================================================
+   SECTIONS & TYPOGRAPHY
+============================================================ */
+.section { padding: var(--s-96) 7vw; max-width: 1180px; margin: 0 auto; }
+.section-heading { margin-bottom: var(--s-48); }
+.section-heading h2 { font-size: clamp(34px, 5vw, 60px); line-height: 1.05; letter-spacing: -0.025em; font-weight: 700; }
+.section-heading h2 em { font-style: normal; color: var(--text-muted); font-weight: 400; }
+
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-48); }
+
+/* Project Cards */
+.project-card {
+  background: transparent;
+  transition: transform var(--dur) var(--ease);
+}
+.project-card:hover { transform: translateY(-4px); }
+
+/* Project Thumbnail */
+.project-thumb {
+  aspect-ratio: 16/10; background: linear-gradient(155deg, #e5e2da, #cfccc2);
+  border-radius: var(--r-img);
+  position: relative; overflow: hidden; cursor: pointer; display: block;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+html[data-theme="dark"] .project-thumb { background: linear-gradient(155deg, #1c2621, #101714); }
+.project-thumb .grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(90deg, rgba(10,10,10,0.05) 1px, transparent 1px),
+    linear-gradient(rgba(10,10,10,0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.project-thumb .index {
+  position: absolute; top: var(--s-24); left: var(--s-24);
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink); opacity: 0.5;
+}
+.thumb-action-overlay {
+  position: absolute; inset: 0; background: rgba(10,10,10,0.25);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity var(--dur) var(--ease);
+}
+.project-thumb:hover .thumb-action-overlay { opacity: 1; }
+.thumb-badge {
+  background: var(--surface); color: var(--ink); padding: 8px 16px;
+  border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: 0.04em; font-weight: 500; box-shadow: var(--shadow-md);
+}
+.blank-thumb-label {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-muted); padding: var(--s-24); text-align: center;
+}
+
+.project-body { padding: var(--s-24) 0 0 0; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--s-16); }
+.project-tags span {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.project-title { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+.project-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--s-24); }
+.project-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--s-16); border-top: 1px solid var(--border); flex-wrap: wrap; gap: var(--s-16);
+}
+
+.btn-primary-sm {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  padding: 10px 20px; border-radius: var(--r-pill); background: var(--ink); color: var(--bg);
+  border: 1px solid transparent; cursor: pointer; transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.btn-primary-sm:hover { transform: translateY(-2px); background: #1a1a1a; }
+
+.arrow-link {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600;
+  color: var(--ink); font-family: var(--font-display);
+}
+.arrow-link svg { width: 16px; height: 16px; transition: transform var(--dur) var(--ease); }
+.arrow-link:hover svg { transform: translate(4px, -4px); }
+
+/* ABOUT SECTION: Slightly reduced desktop horizontal gap between title and paragraph */
+.about-section { background: transparent; }
+.about-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--s-32); align-items: start; }
+.about-statement p { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; }
+.about-copy { color: var(--text-secondary); line-height: 1.65; font-size: 17px; }
+.about-copy p + p { margin-top: var(--s-16); }
+
+/* AI EXPERIMENTS SECTION */
+.ai-card {
+  display: grid; grid-template-columns: 1fr 1.2fr; background: transparent;
+  gap: var(--s-48); align-items: center; margin-top: var(--s-32);
+}
+.ai-visual {
+  position: relative; min-height: 380px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #e5e2da, #d0ccc0); border-radius: var(--r-img); overflow: hidden;
+  border: 1px solid var(--border);
+}
+html[data-theme="dark"] .ai-visual { background: linear-gradient(135deg, #18221d, #0d1411); }
+.ai-visual:before {
+  content: ""; position: absolute; width: 60%; height: 60%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,155,98,0.3) 0%, transparent 70%); filter: blur(25px);
+}
+.ai-orbit {
+  position: absolute; border: 1px solid var(--border); border-radius: 50%;
+  width: 48%; height: 68%; animation: orbit 14s linear infinite;
+}
+.orbit-two { width: 68%; height: 38%; animation-duration: 18s; animation-direction: reverse; }
+.ai-core {
+  position: relative; width: 100px; height: 100px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--ink); color: var(--bg);
+  font-weight: 800; font-size: 1.6rem; box-shadow: var(--shadow-float);
+}
+@keyframes orbit { to { transform: rotate(360deg); } }
+.ai-info { padding: 0; display: flex; flex-direction: column; justify-content: center; }
+.ai-info h3 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; margin: var(--s-16) 0; }
+.ai-info p { color: var(--text-secondary); line-height: 1.65; margin-bottom: var(--s-32); font-size: 17px; }
+
+/* ============================================================
+   08 — CONNECT & 09 — FOOTER
+============================================================ */
+#connect.section {
+  padding-bottom: 0;
+}
+
+.connect-box {
+  background: transparent;
+  padding: 0; display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--s-64); align-items: start;
+  margin-bottom: var(--s-96);
+}
+.connect-left h2 { font-size: clamp(34px, 5vw, 60px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; }
+.connect-left p { color: var(--text-secondary); font-size: 17px; line-height: 1.65; margin-top: var(--s-16); max-width: 440px; }
+
+.connect-links-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16);
+}
+.connect-item-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; border: 1px solid var(--border); border-radius: var(--r-pill);
+  background: var(--surface); font-weight: 600; font-size: 15px; color: var(--ink);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.connect-item-link:hover { transform: translateY(-3px); background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.connect-item-link svg { width: 16px; height: 16px; transition: transform var(--dur) var(--ease); }
+.connect-item-link:hover svg { transform: translate(4px, -4px); }
+
+/* Footer */
+.footer-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--s-48) 0 var(--s-64) 0; border-top: 1px solid var(--border);
+  flex-wrap: wrap; gap: var(--s-24); width: 100%;
+}
+.footer-left-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; text-align: left; }
+.footer-copy { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.footer-tagline { font-size: 15px; font-weight: 500; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+
+.footer-nav-inline {
+  display: flex; gap: var(--s-24); align-items: center;
+  margin-left: auto;
+}
+.footer-nav-inline a {
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  color: var(--text-secondary); transition: color var(--dur) var(--ease);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.footer-nav-inline a:hover { color: var(--ink); }
+
+/* ============================================================
+   FULL SCREEN CASE STUDY SLIDESHOW MODAL
+============================================================ */
+.modal {
+  position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center;
+}
+.modal.open { display: flex; }
+.modal-backdrop { position: absolute; inset: 0; background: #000000; }
+
+.modal-window {
+  position: relative; z-index: 1; width: 100vw; height: 100vh; height: 100dvh;
+  background: #000000; display: flex; flex-direction: column; overflow: hidden;
+}
+
+.modal-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 4vw; background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+}
+.modal-header * { pointer-events: auto; }
+.modal-title-group h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: #FFFFFF; }
+.modal-title-group .modal-subtitle { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+.modal-header-actions { display: flex; align-items: center; gap: 12px; }
+.modal-btn-icon {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 18px; color: #FFFFFF;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.modal-btn-icon:hover { transform: scale(1.08); background: #FFFFFF; color: #000000; border-color: #FFFFFF; }
+
+.slideshow-viewport {
+  position: relative; width: 100vw; height: 100vh; height: 100dvh;
+  background: #000000; overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+.slides-track {
+  display: flex; width: 100%; height: 100%; transition: transform .45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide-item {
+  min-width: 100vw; width: 100vw; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; position: relative; padding: 0; box-sizing: border-box;
+}
+.slide-item img {
+  width: 100%; height: 100%; object-fit: contain;
+}
+
+.blank-slide-placeholder {
+  width: 90vw; max-width: 1200px; height: 75vh; border: 1px dashed rgba(255,255,255,0.25); border-radius: var(--r-card);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #0d0d0d; color: rgba(255,255,255,0.6); text-align: center; padding: var(--s-32);
+}
+.blank-slide-placeholder .slide-num-badge {
+  font-family: var(--font-mono); font-size: 14px; color: var(--accent); font-weight: 600;
+  margin-bottom: 12px; letter-spacing: 0.1em;
+}
+.blank-slide-placeholder p { font-size: 15px; max-width: 480px; line-height: 1.6; }
+.blank-slide-placeholder code { color: #FFFFFF; font-family: var(--font-mono); background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; }
+
+.slide-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 20;
+  width: 52px; height: 52px; border-radius: 50%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2); color: #FFFFFF;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.slide-arrow:hover { transform: translateY(-50%) scale(1.1); background: #FFFFFF; color: #000000; }
+.slide-prev { left: 32px; }
+.slide-next { right: 32px; }
+
+.modal-footer {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
+  padding: 24px 4vw; background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+  display: flex; align-items: center; justify-content: space-between; pointer-events: none;
+}
+.modal-footer * { pointer-events: auto; }
+.slide-counter { font-family: var(--font-mono); font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; }
+.slide-dots { display: flex; gap: 8px; }
+.slide-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.25);
+  transition: width var(--dur) var(--ease), background var(--dur) var(--ease), border-radius var(--dur) var(--ease);
+  cursor: pointer;
+}
+.slide-dot.active { background: #FFFFFF; width: 26px; border-radius: var(--r-pill); }
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+  .section-heading, .connect-box, .about-grid, .ai-card, .card-grid { grid-template-columns: 1fr; }
+  .desktop-nav { display: none; }
+  .menu-btn { display: block; }
+  .slide-arrow { width: 42px; height: 42px; }
+  .slide-prev { left: 12px; }
+  .slide-next { right: 12px; }
+  .blank-slide-placeholder { width: 92vw; height: 68vh; padding: 20px; }
+  .footer-nav-inline { margin-left: 0; flex-wrap: wrap; }
+}
+</style>
+</head>
+
+<body>
+
+  <div class="noise"></div>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- 01 — NAVBAR (Left: Suraj Kanojiya | Right: Work / About / Connect) -->
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Suraj home">
+      <span class="dot"></span>Suraj Kanojiya
+    </a>
+    <ul class="desktop-nav" aria-label="Main navigation">
+      <li><a class="nav-link" href="#work">Work</a></li>
+      <li><a class="nav-link" href="#about">About</a></li>
+      <li><a class="nav-link" href="#connect">Connect</a></li>
+      <li class="desktop-theme-item">
+        <button class="theme-toggle desktop-theme-toggle" id="desktopThemeToggle" type="button" aria-label="Switch theme">
+          <span class="theme-icon">☾</span>
+          <span class="theme-label">DARK</span>
+        </button>
+      </li>
+    </ul>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-menu-links" aria-label="Mobile navigation">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#connect">Connect</a>
+    </nav>
+
+    <div class="mobile-menu-divider"></div>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">
+      <span class="theme-icon">☾</span>
+      <span class="theme-label">DARK</span>
+    </button>
+  </div>
+
+  <main>
+    <!-- 02 — HERO & 03 — CTA BUTTONS -->
+    <section class="hero" id="hero">
+      <canvas id="heroCanvas"></canvas>
+
+      <div class="hero-content">
+        <!-- ( Above , left side , Large ) -->
+        <h1 class="hero-large-text">
+          I turn user needs into intuitive digital experiences from research to polished UI.
+        </h1>
+
+        <!-- ( Below , left , Small ) -->
+        <div class="hero-small-profile">
+          <div class="hero-name">Suraj Kanojiya</div>
+          <div class="hero-role">UI/UX Designer</div>
+        </div>
+
+        <!-- 03 — CTA Buttons ( In center , Stroke , Icon with movement ) -->
+        <div class="hero-actions-center">
+          <a class="btn-stroke roll-btn" href="#work">
+            <span class="roll-track">
+              <span class="roll-text">My Work</span>
+              <span class="roll-text roll-text-clone">My Work</span>
+            </span>
+            <span class="btn-icon-float">↘</span>
+          </a>
+          <a class="btn-stroke roll-btn" href="#about">
+            <span class="roll-track">
+              <span class="roll-text">About Me</span>
+              <span class="roll-text roll-text-clone">About Me</span>
+            </span>
+            <span class="btn-icon-float">↘</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — MOTION (Below of CTA: 1st line R->L, 2nd line L->R) -->
+    <section class="hero-motion-marquee" aria-label="Motion banner">
+      <div class="marquee-line">
+        <div class="marquee-track-rl">
+          <span>USER EXPERIENCE DESIGN</span><i>✦</i>
+          <span>INTERFACE ARCHITECTURE</span><i>✦</i>
+          <span>DESIGN SYSTEMS</span><i>✦</i>
+          <span>USABILITY RESEARCH</span><i>✦</i>
+          <span>PROTOTYPING &amp; TESTING</span><i>✦</i>
+          <span>USER EXPERIENCE DESIGN</span><i>✦</i>
+          <span>INTERFACE ARCHITECTURE</span><i>✦</i>
+          <span>DESIGN SYSTEMS</span><i>✦</i>
+          <span>USABILITY RESEARCH</span><i>✦</i>
+          <span>PROTOTYPING &amp; TESTING</span><i>✦</i>
+        </div>
+      </div>
+      <div class="marquee-line">
+        <div class="marquee-track-lr">
+          <span>INTUITIVE DIGITAL PRODUCTS</span><i>✦</i>
+          <span>HUMAN-CENTERED DESIGN</span><i>✦</i>
+          <span>WIREFRAMING &amp; ITERATION</span><i>✦</i>
+          <span>ACCESSIBLE EXPERIENCES</span><i>✦</i>
+          <span>INTUITIVE DIGITAL PRODUCTS</span><i>✦</i>
+          <span>HUMAN-CENTERED DESIGN</span><i>✦</i>
+          <span>WIREFRAMING &amp; ITERATION</span><i>✦</i>
+          <span>ACCESSIBLE EXPERIENCES</span><i>✦</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — SELECTED WORK -->
+    <section class="section" id="work">
+      <div class="section-heading">
+        <div>
+          <div class="section-label"></div>
+          <h2>Selected Work</h2>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <!-- Project 1: ArtBound -->
+        <article class="project-card">
+          <div class="project-thumb project-slideshow-trigger" data-project="project1" role="button" tabindex="0" aria-label="Open ArtBound full screen case study">
+            <div class="grid-lines"></div>
+            <span class="index">01</span>
+            <div class="blank-thumb-label">
+              <span>ARTBOUND · THUMBNAIL (CLICK FOR FULL SCREEN DECK)</span>
+            </div>
+            <div class="thumb-action-overlay">
+              <span class="thumb-badge">Full Screen Slides ↗</span>
+            </div>
+          </div>
+          <div class="project-body">
+            
+            <h3 class="project-title">ArtBound</h3>
+            
+            <div class="project-tags">
+              <span>UX Research</span><span>·</span><span>UI/UX Design</span><span>·</span><span>Product Design</span>
+            </div>
+            <p class="project-desc">Designing a seamless platform for discovering, booking and managing art workshops.</p>
+            <div class="project-meta">
+                
+              <button class="btn-primary-sm case-study-btn" data-project="project1">
+                View Case Study ↗
+              </button>
+              <a class="arrow-link project-link" href="https://example.com/artbound" data-project="project1">
+                View Prototype 
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2: BookMyShow Redesign -->
+        <article class="project-card">
+          <div class="project-thumb project-slideshow-trigger" data-project="project2" role="button" tabindex="0" aria-label="Open BookMyShow full screen case study">
+            <div class="grid-lines"></div>
+            <span class="index">02</span>
+            <div class="blank-thumb-label">
+              <span>BOOKMYSHOW REDESIGN · THUMBNAIL (CLICK FOR FULL SCREEN DECK)</span>
+            </div>
+            <div class="thumb-action-overlay">
+              <span class="thumb-badge">Full Screen Slides ↗</span>
+            </div>
+          </div>
+          <div class="project-body">
+        
+            <h3 class="project-title">BookMyShow Redesign</h3>
+               <div class="project-tags">
+              <span>UI/UX Design</span><span>·</span><span>Mobile App</span>
+            </div>
+            <p class="project-desc">Reimagining the movie-booking experience with a clearer discovery and decision-making flow.</p>
+            <div class="project-meta">
+              <button class="btn-primary-sm case-study-btn" data-project="project2">
+                View Case Study ↗
+              </button>
+              <a class="arrow-link project-link" href="https://example.com/bookmyshow" data-project="project2">
+                View Prototype 
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section section" id="about">
+      <div class="section-label"></div>
+      <div class="about-grid">
+        <div class="about-statement">
+           <p>About Me</p>
+        </div>
+        <div class="about-copy">
+          <p style="color: black">I’m Suraj, a UI/UX designer who enjoys turning complex problems into clear, intuitive digital experiences.</p>
+          <p style="color:black">I’m curious about how people think, what they need, and how thoughtful design can make products easier and more enjoyable to use. My approach combines user-centered thinking with a strong eye for visual detail.</p>
+          <p style="color: black">I’m currently looking to contribute, learn and grow while creating meaningful digital products.</p>
+        </div> 
+      </div>
+    </section>
+
+    <!-- 07 — EXPERIMENTS -->
+    <section class="section" id="ai">
+      <div class="section-heading">
+        <div>
+          <div class="section-label"></div>
+          <h2>Experiment <em></em></h2>
+        </div>
+      </div>
+
+      <article class="ai-card">
+        <div class="ai-visual">
+          <div class="ai-orbit orbit-one"></div>
+          <div class="ai-orbit orbit-two"></div>
+          <div class="ai-core">AI</div>
+        </div>
+        <div class="ai-info">
+   
+          <h3>Hubly — Freelancer Business Hub</h3>
+                 <div class="project-tags">
+            <span>AI-assisted Design</span><span>·</span><span>SaaS</span><span>·</span><span>UI/UX Design</span>
+          </div>
+          <p>Exploring how AI-assisted design can turn a product idea into a structured SaaS experience from dashboard architecture to polished interface design.</p>
+          
+          <div class="project-meta" style="border:none; padding-top:0;">
+            <button class="btn-primary-sm case-study-btn" data-project="project3">
+              View Case Study ↗
+            </button>
+            <a class="arrow-link" href="https://example.com/hubly" target="_blank" rel="noopener">
+              View Prototype 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- 08 — CONNECT -->
+    <section class="section" id="connect">
+      <div class="connect-box">
+        <!-- Left Side -->
+        <div class="connect-left">
+          <div class="section-label"></div>
+          <h2>LET'S CONNECT</h2>
+          <p>Have a project, opportunity or idea in mind?<br>I’d love to hear about it.</p>
+        </div>
+
+        <!-- Right Side: LinkedIn, Email, Resume, Behance -->
+        <div class="connect-links-grid">
+          <a class="connect-item-link" href="https://www.linkedin.com/in/suraj-kanojiya-a3683338b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener">
+            <span>LinkedIn</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+          <a class="connect-item-link" href="resume.pdf" target="_blank" rel="noopener">
+            <span>Resume</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+          <a class="connect-item-link" href="mailto:suraj00es00.com">
+            <span>Email</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+          <a class="connect-item-link" href="https://www.behance.net/surajk29" target="_blank" rel="noopener">
+            <span>Behance</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+          <a class="connect-item-link" href="https://www.instagram.com/surajarts_31?igsi=MWt1ZzBjejQ3bDJlNQ==" target="_blank" rel="noopener">
+            <span>Instagram</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+          <a class="connect-item-link" href="https://www.github.com/surajkanojiya" target="_blank" rel="noopener">
+            <span>Github</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="8 5 19 5 19 16"></polyline></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 09 — FOOTER -->
+      <footer class="footer-bar">
+        <div class="footer-left-group">
+          <div class="footer-copy">© 2026 Suraj Kanojiya</div>
+          <div class="footer-tagline">Designed &amp; built with curiosity.</div>
+        </div>
+
+        <nav class="footer-nav-inline" aria-label="Footer links">
+          <a href="https://www.linkedin.com/in/suraj-kanojiya-a3683338b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://www.behance.net/surajk29" target="_blank" rel="noopener">Behance ↗</a>
+          <a href="mailto:suraj00es00@gmail.com">Email ↗</a>
+        </nav>
+      </footer>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FULL SCREEN CASE STUDY SLIDESHOW MODAL
+  ============================================================ -->
+  <div class="modal" id="slideshowModal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-window" id="modalWindow">
+      <!-- Top Bar -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="modalProjectTitle">Project Name</h3>
+          <div class="modal-subtitle" id="modalSlideSubtitle">Case Study Presentation · 10 Slides</div>
+        </div>
+        <div class="modal-header-actions">
+          <button class="modal-btn-icon" id="fullscreenToggleBtn" aria-label="Toggle native fullscreen" title="Toggle Native Fullscreen">⛶</button>
+          <button class="modal-btn-icon" id="modalCloseBtn" aria-label="Close modal" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Full Screen Slide Viewport -->
+      <div class="slideshow-viewport">
+        <button class="slide-arrow slide-prev" id="slidePrevBtn" aria-label="Previous slide">←</button>
+        <button class="slide-arrow slide-next" id="slideNextBtn" aria-label="Next slide">→</button>
+        <div class="slides-track" id="slidesTrack"></div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="modal-footer">
+        <div class="slide-counter" id="slideCounter">Slide 01 / 10</div>
+        <div class="slide-dots" id="slideDots"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-toast" id="projectToast" style="position:fixed; z-index:120; left:50%; bottom:25px; transform:translate(-50%,30px); background:var(--ink); color:var(--bg); padding:12px 18px; border-radius:var(--r-pill); font-family:var(--font-mono); font-size:12px; display:flex; gap:16px; opacity:0; pointer-events:none; transition:.3s;">
+    <span>Assign project link in PROJECT_DATA</span>
+  </div>
+
+  <!-- ============================================================
+       SCRIPTS: FULL SCREEN SLIDESHOW, CANVAS & INTERACTION
+  ============================================================ -->
+  <script>
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+
+  document.addEventListener("DOMContentLoaded", () => {
+    /* ============================================================
+       PROJECT DATA: 10 IMAGES PER DECK
+    ============================================================ */
+    const PROJECT_DATA = {
+      project1: {
+        title: "ArtBound — Art Workshop Platform",
+        url: "https://example.com/artbound",
+        images: ["", "", "", "", "", "", "", "", "", ""]
+      },
+      project2: {
+        title: "BookMyShow Redesign",
+        url: "https://example.com/bookmyshow",
+        images: ["", "", "", "", "", "", "", "", "", ""]
+      },
+      project3: {
+        title: "Hubly — Freelancer Business Hub",
+        url: "https://example.com/hubly",
+        images: ["", "", "", "", "", "", "", "", "", ""]
+      }
+    };
+
+    // Sticky Header
+    const header = $(".site-header");
+    const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 30);
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    updateHeader();
+
+    // Mobile Menu
+    const menuBtn = $(".menu-btn");
+    const mobileMenu = $(".mobile-menu");
+
+    const closeMobileMenu = () => {
+      mobileMenu.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.setAttribute("aria-label", "Open menu");
+    };
+
+    menuBtn.addEventListener("click", () => {
+      const open = mobileMenu.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+      menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+
+    $$(".mobile-menu a").forEach(link => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    // Close the burger menu when switching back to desktop width
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 900) closeMobileMenu();
+    });
+
+    // Custom Cursor
+    if (window.matchMedia("(pointer:fine)").matches) {
+      const dot = $(".cursor-dot");
+      const ring = $(".cursor-ring");
+      let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+      let ringX = mouseX, ringY = mouseY;
+
+      window.addEventListener("pointermove", e => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+      });
+
+      const renderCursor = () => {
+        ringX += (mouseX - ringX) * .15;
+        ringY += (mouseY - ringY) * .15;
+        ring.style.left = `${ringX}px`;
+        ring.style.top = `${ringY}px`;
+        requestAnimationFrame(renderCursor);
+      };
+      renderCursor();
+
+      $$("a, button, .project-thumb, .theme-toggle").forEach(el => {
+        el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+        el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
+      });
+    }
+
+    // Touch Support for Rolling Buttons
+    $$(".roll-btn").forEach(btn => {
+      btn.addEventListener("touchstart", () => btn.classList.add("touch-active"), { passive: true });
+      btn.addEventListener("touchend", () => setTimeout(() => btn.classList.remove("touch-active"), 350));
+      btn.addEventListener("touchcancel", () => btn.classList.remove("touch-active"));
+    });
+
+    /* ============================================================
+       FULL SCREEN CASE STUDY SLIDESHOW LOGIC
+    ============================================================ */
+    const modal = $("#slideshowModal");
+    const modalWindow = $("#modalWindow");
+    const modalTitle = $("#modalProjectTitle");
+    const slidesTrack = $("#slidesTrack");
+    const slideDotsContainer = $("#slideDots");
+    const slideCounter = $("#slideCounter");
+    const fullscreenToggleBtn = $("#fullscreenToggleBtn");
+    let currentSlideIndex = 0;
+    const TOTAL_SLIDES = 10;
+
+    function buildSlides(projectId) {
+      const project = PROJECT_DATA[projectId] || PROJECT_DATA.project1;
+      modalTitle.textContent = project.title;
+      slidesTrack.innerHTML = "";
+      slideDotsContainer.innerHTML = "";
+
+      for (let i = 0; i < TOTAL_SLIDES; i++) {
+        const slideItem = document.createElement("div");
+        slideItem.className = "slide-item";
+
+        const imageSrc = project.images && project.images[i] ? project.images[i].trim() : "";
+        if (imageSrc) {
+          slideItem.innerHTML = `<img src="${imageSrc}" alt="${project.title} slide ${i + 1}">`;
+        } else {
+          slideItem.innerHTML = `
+            <div class="blank-slide-placeholder">
+              <div class="slide-num-badge">SLIDE ${String(i + 1).padStart(2, '0')} / 10</div>
+              <p>Full screen slide ready. Assign your image in <code>PROJECT_DATA.${projectId}.images[${i}]</code></p>
+            </div>
+          `;
+        }
+        slidesTrack.appendChild(slideItem);
+
+        const dot = document.createElement("div");
+        dot.className = `slide-dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener("click", () => goToSlide(i));
+        slideDotsContainer.appendChild(dot);
+      }
+
+      currentSlideIndex = 0;
+      updateSlidePosition();
+    }
+
+    function goToSlide(index) {
+      currentSlideIndex = (index + TOTAL_SLIDES) % TOTAL_SLIDES;
+      updateSlidePosition();
+    }
+
+    function updateSlidePosition() {
+      slidesTrack.style.transform = `translateX(-${currentSlideIndex * 100}vw)`;
+      slideCounter.textContent = `Slide ${String(currentSlideIndex + 1).padStart(2, '0')} / ${TOTAL_SLIDES}`;
+      const dots = $$(".slide-dot", slideDotsContainer);
+      dots.forEach((d, idx) => d.classList.toggle("active", idx === currentSlideIndex));
+    }
+
+    function openSlideshow(projectId) {
+      buildSlides(projectId);
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeSlideshow() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    fullscreenToggleBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        modalWindow.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    $$(".project-slideshow-trigger, .case-study-btn").forEach(el => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        openSlideshow(el.dataset.project);
+      });
+    });
+
+    $("#modalCloseBtn").addEventListener("click", closeSlideshow);
+    $(".modal-backdrop").addEventListener("click", closeSlideshow);
+    $("#slidePrevBtn").addEventListener("click", () => goToSlide(currentSlideIndex - 1));
+    $("#slideNextBtn").addEventListener("click", () => goToSlide(currentSlideIndex + 1));
+
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("open")) return;
+      if (e.key === "Escape") closeSlideshow();
+      if (e.key === "ArrowLeft") goToSlide(currentSlideIndex - 1);
+      if (e.key === "ArrowRight") goToSlide(currentSlideIndex + 1);
+    });
+
+    /* ============================================================
+       HERO INTERACTIVE CANVAS GESTURE
+    ============================================================ */
+    const hero = $("#hero");
+    const canvas = $("#heroCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width = 0, height = 0;
+    let points = [];
+    const spacing = 36;
+    const radius = 180;
+
+    const SHAPE_TYPES = ['circle', 'pill', 'star4', 'star8', 'burst', 'diamond', 'cross', 'asterisk'];
+    const PALETTE = [
+      '#2563eb', '#0284c7', '#0d9488', '#16a34a',
+      '#ea580c', '#dc2626', '#B89B62', '#db2777', '#7c3aed'
+    ];
+
+    let mouse = { x: -9999, y: -9999, isHovering: false };
+
+    function initGrid() {
+      const rect = hero.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const cols = Math.floor(width / spacing) + 2;
+      const rows = Math.floor(height / spacing) + 2;
+      const offsetX = (width - (cols - 1) * spacing) / 2;
+      const offsetY = (height - (rows - 1) * spacing) / 2;
+
+      points = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const shape = SHAPE_TYPES[(c * 3 + r * 7) % SHAPE_TYPES.length];
+          const color = PALETTE[(c * 5 + r * 11) % PALETTE.length];
+          points.push({
+            originX: offsetX + c * spacing,
+            originY: offsetY + r * spacing,
+            shape: shape,
+            color: color,
+            currentSize: 0,
+            rotation: (c + r) * 0.2,
+            currentRotation: 0,
+            aspect: shape === 'pill' ? 2.4 : 1
+          });
+        }
+      }
+    }
+
+    function drawShape(point, scale, isDark) {
+      const { originX: x, originY: y, shape, color, aspect, currentRotation } = point;
+      const s = scale * 12;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(currentRotation);
+
+      if (scale < 0.12) {
+        ctx.fillStyle = isDark ? 'rgba(247,246,242,0.15)' : 'rgba(10,10,10,0.12)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+
+      ctx.fillStyle = color;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = Math.max(1.5, s * 0.22);
+      ctx.lineCap = "round";
+
+      switch (shape) {
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(0, 0, s * 0.7, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+        case 'pill':
+          const pw = s * aspect * 0.65, ph = s * 0.55;
+          ctx.beginPath();
+          ctx.roundRect(-pw / 2, -ph / 2, pw, ph, ph / 2);
+          ctx.fill();
+          break;
+        case 'diamond':
+          ctx.beginPath();
+          ctx.moveTo(0, -s * 0.85);
+          ctx.lineTo(s * 0.6, 0);
+          ctx.lineTo(0, s * 0.85);
+          ctx.lineTo(-s * 0.6, 0);
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'star4':
+          ctx.beginPath();
+          for (let i = 0; i < 4; i++) {
+            const a = (i * Math.PI) / 2;
+            ctx.lineTo(Math.cos(a) * s * 0.95, Math.sin(a) * s * 0.95);
+            const ia = a + Math.PI / 4;
+            ctx.lineTo(Math.cos(ia) * s * 0.28, Math.sin(ia) * s * 0.28);
+          }
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'star8':
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const a = (i * Math.PI) / 4;
+            ctx.lineTo(Math.cos(a) * s * 0.9, Math.sin(a) * s * 0.9);
+            const ia = a + Math.PI / 8;
+            ctx.lineTo(Math.cos(ia) * s * 0.35, Math.sin(ia) * s * 0.35);
+          }
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'burst':
+          ctx.beginPath();
+          for (let i = 0; i < 12; i++) {
+            const a = (i * Math.PI) / 6;
+            const len = i % 2 === 0 ? s * 0.95 : s * 0.45;
+            ctx.lineTo(Math.cos(a) * len, Math.sin(a) * len);
+          }
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'cross':
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.7, 0); ctx.lineTo(s * 0.7, 0);
+          ctx.moveTo(0, -s * 0.7); ctx.lineTo(0, s * 0.7);
+          ctx.stroke();
+          break;
+        case 'asterisk':
+          ctx.beginPath();
+          for (let i = 0; i < 3; i++) {
+            const a = (i * Math.PI) / 3;
+            ctx.moveTo(-Math.cos(a) * s * 0.75, -Math.sin(a) * s * 0.75);
+            ctx.lineTo(Math.cos(a) * s * 0.75, Math.sin(a) * s * 0.75);
+          }
+          ctx.stroke();
+          break;
+      }
+      ctx.restore();
+    }
+
+    function renderGrid() {
+      const isDark = document.documentElement.dataset.theme === "dark";
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        const dx = mouse.x - p.originX;
+        const dy = mouse.y - p.originY;
+        const dist = Math.hypot(dx, dy);
+
+        let targetSize = 0;
+        let targetRot = p.rotation;
+
+        if (mouse.isHovering && dist < radius) {
+          const factor = Math.pow(1 - dist / radius, 1.8);
+          targetSize = factor * 1.35;
+          targetRot = p.rotation + (1 - factor) * 1.5;
+        }
+
+        p.currentSize += (targetSize - p.currentSize) * 0.18;
+        p.currentRotation += (targetRot - p.currentRotation) * 0.18;
+
+        drawShape(p, p.currentSize, isDark);
+      }
+      requestAnimationFrame(renderGrid);
+    }
+
+    function updatePointerPos(clientX, clientY) {
+      const rect = hero.getBoundingClientRect();
+      mouse.x = clientX - rect.left;
+      mouse.y = clientY - rect.top;
+      mouse.isHovering = (
+        mouse.x >= -50 && mouse.x <= rect.width + 50 &&
+        mouse.y >= -50 && mouse.y <= rect.height + 50
+      );
+    }
+
+    window.addEventListener("pointermove", e => updatePointerPos(e.clientX, e.clientY));
+    window.addEventListener("touchmove", e => {
+      if (e.touches.length > 0) updatePointerPos(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener("touchend", () => { mouse.isHovering = false; });
+    hero.addEventListener("pointerleave", () => { mouse.isHovering = false; });
+
+    window.addEventListener("resize", initGrid);
+    initGrid();
+    requestAnimationFrame(renderGrid);
+
+    /* ============================================================
+       THEME TOGGLE
+    ============================================================ */
+    const themeBtn = $("#themeToggle");
+    const desktopThemeBtn = $("#desktopThemeToggle");
+    const savedTheme = localStorage.getItem("suraj-theme") || "light";
+    document.documentElement.dataset.theme = savedTheme;
+
+    function updateThemeUI() {
+      const isDark = document.documentElement.dataset.theme === "dark";
+      const icon = isDark ? "☀" : "☾";
+      const label = isDark ? "LIGHT" : "DARK";
+      const aria = isDark ? "Switch to light mode" : "Switch to dark mode";
+
+      themeBtn.querySelector(".theme-icon").textContent = icon;
+      themeBtn.querySelector(".theme-label").textContent = label;
+      themeBtn.setAttribute("aria-label", aria);
+
+      desktopThemeBtn.querySelector(".theme-icon").textContent = icon;
+      desktopThemeBtn.querySelector(".theme-label").textContent = label;
+      desktopThemeBtn.setAttribute("aria-label", aria);
+    }
+    updateThemeUI();
+
+    function toggleTheme() {
+      const isDark = document.documentElement.dataset.theme === "dark";
+      const nextTheme = isDark ? "light" : "dark";
+      document.documentElement.dataset.theme = nextTheme;
+      localStorage.setItem("suraj-theme", nextTheme);
+      updateThemeUI();
+    }
+
+    themeBtn.addEventListener("click", toggleTheme);
+    desktopThemeBtn.addEventListener("click", toggleTheme);
+  });
+  </script>
+</body>
+</html>
