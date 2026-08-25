@@ -40,8 +40,6 @@
 
   --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'DM Mono', monospace;
-  
-  --dot-default: rgba(10,10,10,0.14);
 }
 
 html[data-theme="dark"] {
@@ -52,7 +50,6 @@ html[data-theme="dark"] {
   --text-muted: #647065;
   --border: rgba(247,246,242,0.14);
   --accent: #D4B87E;
-  --dot-default: rgba(247,246,242,0.14);
   --shadow-md: 0 8px 24px -8px rgba(0,0,0,0.5);
   --shadow-float: 0 20px 48px -16px rgba(0,0,0,0.7);
 }
@@ -86,13 +83,6 @@ img { max-width: 100%; display: block; }
 body.cursor-hover .cursor-ring { width: 58px; height: 58px; background: rgba(10,10,10,0.06); }
 html[data-theme="dark"] body.cursor-hover .cursor-ring { background: rgba(247,246,242,0.08); }
 
-/* Focus visibility */
-a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
 /* Header & Navigation */
 .site-header {
   height: 76px; position: fixed; top: 0; left: 0; right: 0; z-index: 50;
@@ -101,13 +91,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   transition: var(--dur) var(--ease);
 }
 .site-header.scrolled {
-  background: rgba(247,246,242,0.85);
+  background: rgba(247,246,242,0.88);
   backdrop-filter: blur(16px);
   border-color: var(--border);
   height: 66px;
 }
 html[data-theme="dark"] .site-header.scrolled {
-  background: rgba(12,16,14,0.85);
+  background: rgba(12,16,14,0.88);
 }
 .brand {
   font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
@@ -290,13 +280,6 @@ html[data-theme="dark"] .project-thumb { background: linear-gradient(155deg, #1c
   transform: scale(1.03);
 }
 
-.project-thumb .grid-lines {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(90deg, rgba(10,10,10,0.05) 1px, transparent 1px),
-    linear-gradient(rgba(10,10,10,0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
 .project-thumb .index {
   position: absolute; top: var(--s-20); left: var(--s-20);
   font-family: var(--font-mono); font-size: 12px; color: var(--ink); opacity: 0.85;
@@ -380,14 +363,14 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
 .arrow-link svg { width: 16px; height: 16px; transition: transform var(--dur) var(--ease); }
 .arrow-link:hover svg { transform: translate(4px, -4px); }
 
-/* ABOUT SECTION: Dynamic CSS variables ensure proper white text in dark mode */
+/* ABOUT SECTION: Deep dark black in light mode, clean white in dark mode */
 .about-section { background: transparent; }
 .about-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--s-32); align-items: start; }
-.about-statement p { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; color: var(--ink); }
-.about-copy p { color: var(--text-secondary); line-height: 1.65; font-size: 17px; }
+.about-statement p { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; color: var(--ink); }
+.about-copy p { color: var(--ink); line-height: 1.65; font-size: 17px; font-weight: 450; }
 .about-copy p + p { margin-top: var(--s-16); }
 
-/* AI EXPERIMENTS SECTION (Matching Card & Thumbnail Dimensions) */
+/* AI EXPERIMENTS SECTION */
 .ai-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -686,7 +669,6 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
         <article class="project-card">
           <div class="project-thumb project-slideshow-trigger" data-project="project1" role="button" tabindex="0" aria-label="Open ArtBound full screen case study">
             <img class="project-thumb-img" src="images/Hero 1.png" alt="ArtBound Cover Thumbnail">
-            <div class="grid-lines"></div>
             <span class="index">01</span>
             <div class="thumb-action-overlay">
               <span class="thumb-badge">Full Screen Slides ↗</span>
@@ -714,7 +696,6 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
         <article class="project-card">
           <div class="project-thumb project-slideshow-trigger" data-project="project2" role="button" tabindex="0" aria-label="Open BookMyShow full screen case study">
             <img class="project-thumb-img" src="images/Featured 1.png" alt="BookMyShow Redesign Cover Thumbnail">
-            <div class="grid-lines"></div>
             <span class="index">02</span>
             <div class="thumb-action-overlay">
               <span class="thumb-badge">Full Screen Slides ↗</span>
@@ -763,7 +744,6 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
       <article class="ai-card">
         <div class="project-thumb project-slideshow-trigger" data-project="project3" role="button" tabindex="0" aria-label="Open Hubly full screen case study">
           <img class="project-thumb-img" src="images/Hubly Featured Image 1.png" alt="Hubly Experiment Cover Thumbnail">
-          <div class="grid-lines"></div>
           <span class="index">03</span>
           <div class="thumb-action-overlay">
             <span class="thumb-badge">Full Screen Slides ↗</span>
