@@ -40,6 +40,8 @@
 
   --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'DM Mono', monospace;
+  
+  --dot-default: rgba(10,10,10,0.14);
 }
 
 html[data-theme="dark"] {
@@ -50,6 +52,7 @@ html[data-theme="dark"] {
   --text-muted: #647065;
   --border: rgba(247,246,242,0.14);
   --accent: #D4B87E;
+  --dot-default: rgba(247,246,242,0.14);
   --shadow-md: 0 8px 24px -8px rgba(0,0,0,0.5);
   --shadow-float: 0 20px 48px -16px rgba(0,0,0,0.7);
 }
@@ -83,6 +86,13 @@ img { max-width: 100%; display: block; }
 body.cursor-hover .cursor-ring { width: 58px; height: 58px; background: rgba(10,10,10,0.06); }
 html[data-theme="dark"] body.cursor-hover .cursor-ring { background: rgba(247,246,242,0.08); }
 
+/* Focus visibility */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 /* Header & Navigation */
 .site-header {
   height: 76px; position: fixed; top: 0; left: 0; right: 0; z-index: 50;
@@ -91,13 +101,13 @@ html[data-theme="dark"] body.cursor-hover .cursor-ring { background: rgba(247,24
   transition: var(--dur) var(--ease);
 }
 .site-header.scrolled {
-  background: rgba(247,246,242,0.88);
+  background: rgba(247,246,242,0.85);
   backdrop-filter: blur(16px);
   border-color: var(--border);
   height: 66px;
 }
 html[data-theme="dark"] .site-header.scrolled {
-  background: rgba(12,16,14,0.88);
+  background: rgba(12,16,14,0.85);
 }
 .brand {
   font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
@@ -237,7 +247,7 @@ html[data-theme="dark"] .site-header.scrolled {
 @keyframes marqueeLR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
 /* ============================================================
-   SECTIONS & CONSISTENT THUMBNAIL DIMENSIONS
+   SECTIONS & UNIFIED THUMBNAIL SIZING
 ============================================================ */
 .section { padding: var(--s-96) 7vw; max-width: 1180px; margin: 0 auto; }
 .section-heading { margin-bottom: var(--s-48); }
@@ -254,7 +264,7 @@ html[data-theme="dark"] .site-header.scrolled {
 }
 .project-card:hover { transform: translateY(-4px); }
 
-/* UNIFIED THUMBNAIL DIMENSIONS: Same ratio and radius everywhere */
+/* UNIFIED THUMBNAIL DIMENSIONS */
 .project-thumb {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -370,21 +380,20 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
 .arrow-link svg { width: 16px; height: 16px; transition: transform var(--dur) var(--ease); }
 .arrow-link:hover svg { transform: translate(4px, -4px); }
 
-/* ABOUT SECTION */
+/* ABOUT SECTION: Dynamic CSS variables ensure proper white text in dark mode */
 .about-section { background: transparent; }
 .about-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--s-32); align-items: start; }
 .about-statement p { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; color: var(--ink); }
-.about-copy { color: var(--text-secondary); line-height: 1.65; font-size: 17px; }
+.about-copy p { color: var(--text-secondary); line-height: 1.65; font-size: 17px; }
 .about-copy p + p { margin-top: var(--s-16); }
 
-/* AI EXPERIMENTS SECTION (UNIFIED THUMBNAIL RATIO & CLEAN CARD) */
+/* AI EXPERIMENTS SECTION (Matching Card & Thumbnail Dimensions) */
 .ai-card {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  background: transparent;
+  grid-template-columns: 1fr 1fr;
   gap: var(--s-48);
-  align-items: center;
-  margin-top: var(--s-16);
+  align-items: start;
+  width: 100%;
 }
 
 .ai-info {
@@ -393,17 +402,18 @@ html[data-theme="dark"] .btn-primary-sm:hover { background: #FFFFFF; }
   justify-content: center;
 }
 .ai-info h3 {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.01em;
   margin-bottom: 8px;
   color: var(--ink);
+  line-height: 1.25;
 }
 .ai-info p {
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
   margin-bottom: var(--s-24);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* ============================================================
